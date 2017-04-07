@@ -99,7 +99,6 @@ public class Indexer {
 			insertIntoIndex( docID, token, offset++ );
 		    }
 		    index.docLengths.put( "" + docID, offset );
-		    //System.out.println(index.docLengths);
 		    reader.close();
 		}
 		catch ( IOException e ) {

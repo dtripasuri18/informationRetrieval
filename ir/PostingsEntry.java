@@ -9,11 +9,14 @@
 package ir;
 
 import java.io.Serializable;
+import java.util.Vector;
+
 
 public class PostingsEntry implements Comparable<PostingsEntry>, Serializable {
     
     public int docID;
     public int offset;
+    public Vector<Integer> offsets;
     public double score;
 
     /**
@@ -34,8 +37,17 @@ public class PostingsEntry implements Comparable<PostingsEntry>, Serializable {
     public PostingsEntry(int fileno, int position) 
     {
 		this.docID = fileno;
-		this.offset = position;
+		this.offsets = new Vector<Integer>();
+		//System.out.println("adding fileno " + fileno + " postion " + position);
+		this.offsets.add(position);
+		//this.score = this.offsets.size()+1;
+		//this.offset = position;
 	}
+    /*public PostingsEntry(PostingsEntry oneOff, int position)
+    {
+    	this.docID = oneOff.docID;
+    	this.offset = position;
+    }*/
 
 }
 
