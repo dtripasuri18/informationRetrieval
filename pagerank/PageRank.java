@@ -162,8 +162,8 @@ public class PageRank{
 	//   YOUR CODE HERE
 	//
     	
-    	double [] oldVals = new double[MAX_NUMBR_OF_DOCS];
-    	double [] newVals = new double[MAX_NUMBR_OF_DOCS];
+    	double [] oldVals = new double[MAX_NUMBER_OF_DOCS];
+    	double [] newVals = new double[MAX_NUMBER_OF_DOCS];
     	boolean converged = false;
     	
     	int iterations = 0;
@@ -171,17 +171,23 @@ public class PageRank{
     	double C = 1-BORED;
     	while(!converged && iterations < MAX_NUMBER_OF_ITERATIONS)
     	{
+    		Arrays.fill(newVals, BORED/numberOfDocs);
     		oldVals = newVals;
-    		Arrays.fill(newVals, BORED/oldVals.length);
-    		for(int i = 0; i < newVals.length; i++) //lenght should be the same. go through new ot set it
+    		
+    		System.out.println(iterations);
+    		for(int i = 0; i < numberOfDocs; i++) //lenght should be the same. go through new ot set it
     		{
-    			for(int j = 0; j <oldVals.length; i++) //go through old to figure out what value it should be
+    			//System.out.println(i);
+    			for(int j = 0; j <numberOfDocs; j++) //go through old to figure out what value it should be
     			{
     				links = link.get(j);
     				
-    				if(links = null)
+    				if(links == null)
     				{
-    					newVals[i] += oldVals[j] * (C/oldVals.length) + BORED/;
+    					System.out.println("new vals: "+ newVals[i]);
+    					System.out.println("old vals: "+ oldVals[i]);
+    					newVals[i] += oldVals[j] * (C/numberOfDocs);
+    					//System.out.println(newVals[i]);
     				}
     				else
     				{
@@ -193,10 +199,25 @@ public class PageRank{
     			}
     		}
     		
-    		converged = isConvereged(oldVals, newVals);
+    		converged = isConverged(oldVals, newVals);
+    		//System.out.println(converged);
     		iterations++;
     	}
     	
+    	File file = new File("" + "./pagerank.score");
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+				FileWriter fw = new FileWriter(file, true);
+				for (int i = 0; i < newVals.length; i++) {
+					fw.append("" + docName[i] + " " + newVals[i]);
+					fw.append(System.lineSeparator());
+				}
+				fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
     }
 
 
@@ -205,8 +226,14 @@ public class PageRank{
     	double diff = 0;
     	for(int i = 0; i < oldVals.length; i++)
     	{
+    		System.out.println(newVals[i]);
+    		System.out.println(oldVals[i]);
+    		//System.out.println(oldVals[i] - newVals[i]);
     		diff += Math.abs(oldVals[i] - newVals[i]);
+    		//System.out.println(oldVals[i] - newVals[i]);
+    		//System.out.println(diff);
     	}
+    	//System.out.println(diff);
     	
     	return diff <= EPSILON;
     	
@@ -229,7 +256,7 @@ public class PageRank{
     		}
     		else
     		{
-    			Hashtable<Integer, Boolean> docList = link.get(start);
+    			Hashtable<Integer, Boolean> docList = link.get(page);
     			
     			if(docList == null)
     			{
@@ -238,8 +265,8 @@ public class PageRank{
     			}
     			else
     			{
-    				ArrayList<Integer> a = new ArrayList<Integer>();
-    				docList.keySet().toArray(a);
+    				ArrayList<Integer> a = new ArrayList<Integer>(docList.keySet());
+    				//docList.keySet();
     				int numDocs = docList.size();
     				page = a.get(rand.nextInt(numDocs));
     				
